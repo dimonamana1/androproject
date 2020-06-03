@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SecondTask</string>
+    <string name="Settings">Настройки</string>
+    <string name="search">Поиск</string>
+    <string name="send_to_service">Send to service</string>
+    <string name="exit">Выход</string>
+    <string name="title_updating_weather">Updating</string>
+    <string name="text_updating_weather">Updating weather…</string>
+    <string name="title_current_weather">%1$d° — %2$s</string>
+</resources>
