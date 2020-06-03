@@ -17,7 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -31,7 +35,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        List<String> list = Arrays.asList("ASASS", "adadad", "sdgdgsd", "ertyu");
+
+        AppsAdapter appsAdapter = new AppsAdapter();
+
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(appsAdapter);
+        for (String s : list) {
+            appsAdapter.setStr(s);
+        }
+        appsAdapter.notifyDataSetChanged();
         SharedPreferences sharedPreferences = getSharedPreferences("lWeather", MODE_PRIVATE);
         long lastUpdate = sharedPreferences.getLong("lUpdate", 0);
 
@@ -39,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
 
         geoPermission();
@@ -49,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter(G_WEATHER);
         registerReceiver(weatherReceiver, intentFilter);
     }
+
     @Override
     protected void onStop() {
         unregisterReceiver(weatherReceiver);
@@ -96,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "Service disconnected!");
         }
     };
+
     private static class WeatherReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
