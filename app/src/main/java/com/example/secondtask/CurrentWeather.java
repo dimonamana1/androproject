@@ -10,7 +10,7 @@ public class CurrentWeather implements Parcelable {
     private ForecastLocation location;
 
 
-    protected CurrentWeather(Parcel in) {
+    private CurrentWeather(Parcel in) {
         current = in.readParcelable(ForecastCurrent.class.getClassLoader());
         location = in.readParcelable(ForecastLocation.class.getClassLoader());
     }
@@ -27,11 +27,11 @@ public class CurrentWeather implements Parcelable {
         }
     };
 
-    public ForecastCurrent getCurrent() {
+    ForecastCurrent getCurrent() {
         return current;
     }
 
-    public ForecastLocation getLocation() {
+    ForecastLocation getLocation() {
         return location;
     }
 

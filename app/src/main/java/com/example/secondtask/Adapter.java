@@ -2,16 +2,13 @@ package com.example.secondtask;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -24,15 +21,15 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private List<WeatherPerDay> weatherPerDay = new ArrayList<>();
 
     private static OnItemClickListener onItemClickListener;
-    public Adapter(OnItemClickListener onItemClickListener){
-        this.onItemClickListener = onItemClickListener;
+    Adapter(OnItemClickListener onItemClickListener){
+        Adapter.onItemClickListener = onItemClickListener;
     }
-    @Nullable
-    public void setStr(WeatherPerDay weatherPerDay) {
+    void setStr(WeatherPerDay weatherPerDay) {
         this.weatherPerDay.add(weatherPerDay);
     }
 
     @Override
+    @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -63,7 +60,7 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         private final TextView feelsLike;
 
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             city = itemView.findViewById(R.id.city);
