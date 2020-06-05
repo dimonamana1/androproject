@@ -12,11 +12,14 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,24 +31,41 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_CODE = 0;
     public static final String G_WEATHER = "com.example.secondtask.ACTION_GOT_WEATHER";
     public static final String EXTRA_CURRENT_WEATHER = "current_weather";
-    private final WeatherReceiver weatherReceiver = new WeatherReceiver();
+    BroadcastReceiver weatherReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        List<String> list = Arrays.asList("ASASS", "adadad", "sdgdgsd", "ertyu");
+        weatherReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                intent.getAction();
+                final CurrentWeather currentWeather = intent.getParcelableExtra(EXTRA_CURRENT_WEATHER);
+                assert currentWeather != null;
 
-        AppsAdapter appsAdapter = new AppsAdapter();
+                Adapter.OnItemClickListener onItemClickListener = new Adapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view) {
+                        Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                        intent.putExtra("currentWeather", currentWeather);
+                        startActivity(intent);
+                    }
+                };
+                Adapter adapter = new Adapter(onItemClickListener);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(appsAdapter);
-        for (String s : list) {
-            appsAdapter.setStr(s);
-        }
-        appsAdapter.notifyDataSetChanged();
+                adapter.setStr(new WeatherPerDay(currentWeather.getLocation().getName(), String.valueOf(currentWeather.getCurrent().getTemperature()), currentWeather.getCurrent().getWeather_icons()[0], String.valueOf(currentWeather.getCurrent().getFeelslike())));
+                RecyclerView recyclerView = findViewById(R.id.recyclerview);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
+                recyclerView.setLayoutManager(layoutManager);
+                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getBaseContext(), layoutManager.getOrientation());
+                recyclerView.addItemDecoration(dividerItemDecoration);
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        };
+
         SharedPreferences sharedPreferences = getSharedPreferences("lWeather", MODE_PRIVATE);
         long lastUpdate = sharedPreferences.getLong("lUpdate", 0);
 
@@ -111,11 +131,4 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "Service disconnected!");
         }
     };
-
-    private static class WeatherReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            intent.getAction();
-        }
-    }
 }

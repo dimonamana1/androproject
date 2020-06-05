@@ -9,7 +9,7 @@ public class ForecastCurrent implements Parcelable {
         temperature = in.readFloat();
         weather_code = in.readFloat();
         weather_icons = in.createStringArray();
-        weather_description = in.createStringArray();
+        weather_description = in.readString();
         wind_speed = in.readFloat();
         wind_degree = in.readFloat();
         wind_dir = in.readString();
@@ -50,7 +50,7 @@ public class ForecastCurrent implements Parcelable {
         return weather_icons;
     }
 
-    public String[] getWeather_description() {
+    public String getWeather_description() {
         return weather_description;
     }
 
@@ -98,7 +98,7 @@ public class ForecastCurrent implements Parcelable {
     private float temperature;
     private float weather_code;
     private String[] weather_icons;
-    private String[] weather_description;
+    private String weather_description;
     private float wind_speed;
     private float wind_degree;
     private String wind_dir;
@@ -121,7 +121,7 @@ public class ForecastCurrent implements Parcelable {
         dest.writeFloat(temperature);
         dest.writeFloat(weather_code);
         dest.writeStringArray(weather_icons);
-        dest.writeStringArray(weather_description);
+        dest.writeString(weather_description);
         dest.writeFloat(wind_speed);
         dest.writeFloat(wind_degree);
         dest.writeString(wind_dir);

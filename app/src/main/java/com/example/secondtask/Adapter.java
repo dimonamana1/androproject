@@ -1,21 +1,35 @@
 package com.example.secondtask;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
+class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
-    private List<String> list = new ArrayList<>();
-    public void setStr(String str) {
-        this.list.add(str);
+    private List<WeatherPerDay> weatherPerDay = new ArrayList<>();
+
+    private static OnItemClickListener onItemClickListener;
+    public Adapter(OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener;
+    }
+    @Nullable
+    public void setStr(WeatherPerDay weatherPerDay) {
+        this.weatherPerDay.add(weatherPerDay);
     }
 
     @Override
@@ -26,29 +40,49 @@ class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String curString = list.get(position);
-        holder.nameTv.setText(curString);
-        holder.versionTv.setText(curString);
+        WeatherPerDay curElem = weatherPerDay.get(position);
+        holder.city.setText(curElem.getCity());
+        holder.temperature.setText("Temp: " + curElem.getTemperature());
+        Picasso.with(holder.icon.getContext()).load(curElem.getIconUrl()).into(holder.icon);
+        holder.feelsLike.setText("feels like: " + curElem.getFeelsLike());
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return weatherPerDay.size();
     }
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView nameTv;
-        private final TextView versionTv;
+        private final TextView city;
+        private final TextView temperature;
+        private final ImageView icon;
+        private final TextView feelsLike;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            nameTv = itemView.findViewById(R.id.name_tv);
-            versionTv = itemView.findViewById(R.id.version_tv);
+            city = itemView.findViewById(R.id.city);
+            temperature = itemView.findViewById(R.id.temperature);
+            icon = itemView.findViewById(R.id.icon);
+            feelsLike = itemView.findViewById(R.id.feelsLike);
+            itemView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onItemClick(v);
+                }
+            });
+
         }
+
+    }
+    public interface OnItemClickListener{
+        void onItemClick(View view);
     }
 }
 

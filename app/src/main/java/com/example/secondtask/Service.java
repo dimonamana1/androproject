@@ -75,19 +75,18 @@ public class Service extends android.app.Service {
                     R.string.title_current_weather,
                     (int) currentWeather.getCurrent().getTemperature(),
                     currentWeather.getLocation().getName()));
-            builder.setContentText(String.valueOf(currentWeather.getCurrent().getCloudcover()));
         }
         builder.setOngoing(true);
 
-        Intent mainIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                this,
-                0,
-                mainIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        );
-
-        builder.setContentIntent(pendingIntent);
+//        Intent mainIntent = new Intent(this, MainActivity.class);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(
+//                this,
+//                0,
+//                mainIntent,
+//                PendingIntent.FLAG_UPDATE_CURRENT
+//        );
+//
+//        builder.setContentIntent(pendingIntent);
 
         return builder.build();
     }
